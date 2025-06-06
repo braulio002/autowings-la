@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
     const preloader = document.querySelector('.preloader');
     
-    window.addEventListener('load', function() {
+    setTimeout(() => {
         preloader.classList.add('fade-out');
         setTimeout(() => {
             preloader.style.display = 'none';
         }, 500);
-    });
+    }, 1200);
 
     // Navbar scroll effect
     const navbar = document.querySelector('.navbar');
@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function() {
         navMenu.classList.toggle('active');
     });
 
-    // Close mobile menu when clicking a link
     const navLinks = document.querySelectorAll('.nav-link');
     
     navLinks.forEach(link => {
@@ -46,7 +45,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     let currentSlide = 0;
     
-    // Create dots
     testimonialSlides.forEach((slide, index) => {
         const dot = document.createElement('div');
         dot.classList.add('slider-dot');
@@ -83,7 +81,6 @@ document.addEventListener('DOMContentLoaded', function() {
     nextBtn.addEventListener('click', nextSlide);
     prevBtn.addEventListener('click', prevSlide);
     
-    // Auto slide
     let slideInterval = setInterval(nextSlide, 6000);
     
     // Pause on hover
@@ -97,7 +94,6 @@ document.addEventListener('DOMContentLoaded', function() {
         slideInterval = setInterval(nextSlide, 5000);
     });
 
-    // Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
@@ -130,7 +126,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Set initial state for animated elements
     const animatedElements = document.querySelectorAll('.service-card, .gallery-item, .about-content, .about-image');
     animatedElements.forEach(element => {
         element.style.opacity = '0';
@@ -140,4 +135,80 @@ document.addEventListener('DOMContentLoaded', function() {
     
     window.addEventListener('scroll', animateOnScroll);
     window.addEventListener('load', animateOnScroll);
+});
+
+// Set minimum date to today
+const dateInput = document.getElementById('date');
+const today = new Date().toISOString().split('T')[0];
+dateInput.min = today;
+
+// Special Requests validation
+const notesField = document.getElementById('notes');
+const notesWarning = document.getElementById('notesWarning');
+let lastInputTime = 0;
+
+notesField.addEventListener('input', function(e) {
+    const now = Date.now();
+    
+    if (now - lastInputTime < 100) {
+        this.value = this.value.slice(0, -1);
+        return;
+    }
+    lastInputTime = now;
+    
+    const input = this.value;
+    
+    let sanitized = input.replace(/<[^>]*>/g, '');
+    
+    sanitized = sanitized.replace(/[<>{}()\[\]\\;=]/g, '');
+    
+    const suspiciousPatterns = [
+        /(\.\s*){3,}/g,
+        /(=\s*){2,}/g,
+        /(\(\s*){3,}/g,
+        /(\)\s*){3,}/g,
+        /(function\s*)/gi,
+        /(var\s+|let\s+|const\s+)/gi,
+        /(=>\s*)/g,
+        /(;\s*){2,}/g,
+        /(\/\*[\s\S]*?\*\/|\/\/.*)/g
+    ];
+    
+    let containsCode = false;
+    suspiciousPatterns.forEach(pattern => {
+        if (pattern.test(input)) {
+            containsCode = true;
+            sanitized = sanitized.replace(pattern, '');
+        }
+    });
+    
+    if (containsCode) {
+        this.classList.add('suspicious-input');
+        notesWarning.style.display = 'block';
+        setTimeout(() => {
+            this.classList.remove('suspicious-input');
+            notesWarning.style.display = 'none';
+        }, 3000);
+        this.value = sanitized;
+    } else {
+        this.value = sanitized;
+    }
+});
+
+// Booking form submission
+const bookingForm = document.getElementById('bookingForm');
+
+bookingForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    notesField.value = notesField.value.replace(/[<>{}()\[\]\\;=]/g, '');
+    
+    const formData = new FormData(bookingForm);
+    const data = Object.fromEntries(formData.entries());
+    
+    console.log('Form submitted:', data);
+    
+    alert('Thank you for your booking request! Our concierge will contact you shortly to confirm your appointment.');
+    
+    bookingForm.reset();
 });
