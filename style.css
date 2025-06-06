@@ -135,45 +135,29 @@ img {
     transition: opacity 0.5s ease;
 }
 
-.preloader.fade-out {
-    opacity: 0;
-}
-
 .preloader-logo {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
     text-align: center;
 }
 
 .logo-svg {
-    width: 300px;
-    height: 80px;
+    width: 100%;
+    height: auto;
 }
 
 .logo-text {
     fill: none;
     stroke: var(--white);
-    stroke-width: 1;
+    stroke-width: 1.5px;
     stroke-dasharray: 1000;
     stroke-dashoffset: 1000;
-    animation: draw 3s ease-in-out forwards;
+    animation: draw 2s ease-in-out forwards;
     font-family: 'Playfair Display', serif;
     font-weight: 700;
-    font-size: 40px;
-}
-
-.loading-bar {
-    width: 300px;
-    height: 3px;
-    background-color: rgba(255, 255, 255, 0.2);
-    margin-top: 30px;
-    border-radius: 3px;
-    overflow: hidden;
-}
-
-.loading-progress {
-    height: 100%;
-    width: 0;
-    background-color: var(--primary-color);
-    animation: loading 2.5s ease-in-out forwards;
+    font-size: 60px;
+    text-transform: uppercase;
 }
 
 @keyframes draw {
@@ -182,10 +166,8 @@ img {
     }
 }
 
-@keyframes loading {
-    to {
-        width: 100%;
-    }
+.preloader.fade-out {
+    opacity: 0;
 }
 
 /* Navigation */
