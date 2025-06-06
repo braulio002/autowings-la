@@ -1,4 +1,3 @@
-/* Booking Page Styles */
 .booking-header {
     position: relative;
     height: 50vh;
@@ -121,6 +120,27 @@
 
 .form-submit button:hover::after {
     left: 100%;
+}
+
+#notes.suspicious-input {
+    border: 2px solid #ff6b6b;
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+}
+
+.input-warning {
+    font-size: 0.8rem;
+    margin-top: 5px;
+    transition: all 0.3s ease;
+}
+
+#notes {
+    transition: border 0.3s ease;
 }
 
 /* Responsive Styles */
